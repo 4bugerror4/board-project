@@ -1,0 +1,92 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: _head('메인페이지')}">
+<!-- common.html(_head('title') -->
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="~{fragments/common :: _nav('index')}">
+		<!-- common.html(_nav) -->
+	</nav>
+
+	<main role="main" class="container">
+
+		<div class="starter-template">
+			<h1>Start Bug Error Board</h1>
+			<p class="lead">
+				Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.
+			</p>
+		</div>
+
+	</main>
+
+	<div class="container">
+		<form th:action="@{/}" method="GET">
+			<div class="row justify-content-center">
+				<div class="col-12 col-md-10 col-lg-8">
+					<form class="card card-sm">
+						<div class="card-body row no-gutters align-items-center">
+							<div class="col-auto">
+								<i class="fas fa-search h4 text-body"></i>
+							</div>
+							<div class="col">
+								<input class="form-control form-control-lg form-control-borderless" type="text" id="searchText" name="searchText" th:value="${param.searchText}" placeholder="Search topics or keywords">
+							</div>
+							<div class="col-auto">
+								<button class="btn btn-lg btn-success" type="submit">Search</button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<!--end of col-->
+			</div>
+		</form>
+		<!-- /.searchbtn -->
+
+		<div class="mt-5 text-right">
+			총 건수 : <span th:text="${boards.totalElements}"></span>
+		</div>
+
+		<table class="mt-3 table table-striped">
+			<thead>
+				<tr>
+					<th class="col-1 text-center">번호</th>
+					<th class="col-7">제목</th>
+					<th class="col-2 text-center">작성자</th>
+					<th class="col-2 text-center">작성일</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr th:each="board : ${boards}">
+					<th class="col-1 text-center" th:text=${board.id}>1</th>
+					<td class="col-7"><a th:href="@{/board/detail/{id}(id = ${board.id})}" th:text=${board.title}>Mark</a></td>
+					<td class="col-2 text-center">버그왕</td>
+					<td class="col-2 text-center" th:text="${#dates.format(board.createDate, 'yyyy-MM-dd')}">@mdo</td>
+				</tr>
+			</tbody>
+		</table>
+		<!-- /.table -->
+
+		<nav aria-label="Page navigation example">
+			<ul class="pagination justify-content-center">
+				<li class="page-item" th:classappend="${1 == boards.pageable.pageNumber + 1} ? 'disabled'">
+					<a class="page-link" href="#" th:href="@{/(page=${boards.pageable.pageNumber - 1}, searchText=${param.searchText})}" tabindex="-1" aria-disabled="true">Previous</a>
+				</li>
+				<li class="page-item" th:classappend="${i == boards.pageable.pageNumber + 1} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage, endPage)}">
+					<a class="page-link" href="#" th:href="@{/(page=${i - 1}, searchText=${param.searchText})}" th:text=${i}>1</a>
+				</li>
+				<li class="page-item" th:classappend="${boards.totalPages == boards.pageable.pageNumber + 1} ? 'disabled'">
+					<a class="page-link" href="#" th:href="@{/(page=${boards.pageable.pageNumber + 1}, searchText=${param.searchText})}">Next</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
+
+
+	<!-- Optional JavaScript; choose one of the two! -->
+
+	<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+</body>
+</html>
