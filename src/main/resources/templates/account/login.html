@@ -12,9 +12,16 @@
 <link href="/css/siginin.css" th:href="@{/css/signin.css}" rel="stylesheet">
 </head>
 <body class="text-center">
-	<form class="form-signin">
+	<form class="form-signin" th:action="@{/auth/account/loginProc}" method="POST">
 		<a href="/" th:href=@{/}><img class="mb-4" src="https://getbootstrap.com/docs/4.5/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"></a>
 		<h1 class="h3 mb-3 font-weight-normal">로그인</h1>
+		
+		<div th:if="${param.error}" class="alert alert-danger" role="alert">
+			아이디, 패스워드가 틀렸습니다.
+		</div>
+		<div th:if="${param.logout}" class="alert alert-success" role="alert">
+			로그아웃 정상처리 되었습니다.
+		</div>
 		
 		<label for="username" class="sr-only">아이디</label>
 		<input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>

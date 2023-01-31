@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 import javax.validation.Valid;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bug.board.auth.PrincipalUserDetails;
 import com.bug.board.domain.Board;
 import com.bug.board.service.BoardService;
 import com.bug.board.validator.BoardValidator;
@@ -42,9 +44,10 @@ public class BoardController {
 
 	@Transactional(readOnly = true)
 	@GetMapping("/detail/{id}")
-	public String boardDetail(@PathVariable Long id, Model model) {
+	public String boardDetail(@PathVariable Long id, Model model, @AuthenticationPrincipal PrincipalUserDetails principal) {
 
 		Board board = boardService.findById(id);
+		model.addAttribute("principal", principal);
 		model.addAttribute("board", board);
 
 		return "board/detail";
@@ -60,8 +63,7 @@ public class BoardController {
 		if (bindingResult.hasErrors()) {
 			return "board/write";
 		}
-
-		board.setCreateDate(Timestamp.valueOf(getDateTime()));
+		
 		boardService.save(board);
 
 		return "redirect:/";
@@ -75,22 +77,6 @@ public class BoardController {
 		model.addAttribute("board", board);
 
 		return "board/modify";
-	}
-
-
-	private String getDateTime() {
-
-		LocalDate nowDate = LocalDate.now();
-		DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		String formatedNowDate = nowDate.format(formatterDate);
-
-		LocalTime nowTime = LocalTime.now();
-		DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm:ss");
-		String formatedNowTime = nowTime.format(formatterTime);
-
-		String dateTime = formatedNowDate + " " + formatedNowTime;
-
-		return dateTime;
 	}
 
 }

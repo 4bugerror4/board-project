@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sce="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:fragment="_head(title)">
 <!-- Required meta tags -->
@@ -31,12 +31,21 @@
 				<li class="nav-item" th:classappend="${nav} == 'write' ? 'active'"><a class="nav-link" href="#" th:href="@{/board/write}">글쓰기</a></li>
 			</ul>
 
-			<div class="text-right">
+			<div class="text-right" sec:authorize="!isAuthenticated()">
 				<button class="btn btn-primary">
-					<a class="text-white" href="#" th:href=@{/account/login}>로그인</a>
+					<a class="text-white" href="#" th:href=@{/auth/account/login}>로그인</a>
 				</button>
 				<button class="btn btn-primary">
-					<a class="text-white" href="#" th:href=@{/account/register}>회원가입</a>
+					<a class="text-white" href="#" th:href=@{/auth/account/register}>회원가입</a>
+				</button>
+			</div>
+			
+			<div class="text-right" sec:authorize="isAuthenticated()">
+				<button class="btn btn-primary">
+					<a class="text-white" href="#" th:href=@{/}><span sec:authentication="name"></span><!-- <span th:text=${principal.user.roleType}></span> --></a>
+				</button>
+				<button class="btn btn-primary">
+					<a class="text-white" href="#" th:href=@{/logout}>로그아웃</a>
 				</button>
 			</div>
 		</div>

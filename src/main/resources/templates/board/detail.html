@@ -36,12 +36,17 @@
 	
 			<div class="form-group" th:text=${board.content}>내용</div>
 			<hr />
-	
-			<div class="text-right">
+			
+			<div class="text-right" th:if="${board.user.username} == ${principal.user.username}">
 				<a th:href="@{/board/modify/{id}(id=${board.id})}" class="btn btn-warning" type="button">수정</a>
 				<button id="btn-delete" class="btn btn-danger" type="button">삭제</button>
 				<a href="/" class="btn btn-secondary">되돌아가기</a>
 			</div>
+			
+			<div class="text-right" th:if="${board.user.username} != ${principal.user.username}">
+				<a href="/" class="btn btn-secondary">되돌아가기</a>
+			</div>
+			
 		</form>
 	</div>
 
