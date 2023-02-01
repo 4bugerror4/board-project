@@ -6,7 +6,7 @@ import com.bug.board.domain.User;
 
 public interface UserService {
 	
-	Optional<User> findByUsername(String username);
+	User findByUsername(String username);
 	
 	User save(User user);
 

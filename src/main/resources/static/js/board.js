@@ -1,4 +1,4 @@
-let index = {
+let indexBoard = {
 	init: function() {
 		$('#btn-modify').on('click', () => {
 			this.modify();
@@ -34,6 +34,8 @@ let index = {
 	
 	delete: function() {
 		let id = $('#id').val();
+		
+		console.log(id);
 
 		
 		$.ajax({
@@ -52,4 +54,4 @@ let index = {
 	
 }
 
-index.init();
+indexBoard.init();

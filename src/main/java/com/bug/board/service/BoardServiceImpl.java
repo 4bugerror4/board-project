@@ -48,13 +48,7 @@ public class BoardServiceImpl implements BoardService {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		
-		User user = userService.findByUsername(auth.getName()).orElseThrow(new Supplier<UsernameNotFoundException>() {
-
-			@Override
-			public UsernameNotFoundException get() {
-				return new UsernameNotFoundException("해당 아이디는 존재하지 않습니다. : " + auth.getName());
-			}
-		});
+		User user = userService.findByUsername(auth.getName());
 		
 		reqBoard.setUser(user);
 		reqBoard.setCreateDate(Timestamp.valueOf(getDateTime()));

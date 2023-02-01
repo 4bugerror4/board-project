@@ -1,9 +1,6 @@
 package com.bug.board.controller;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -15,12 +12,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bug.board.auth.PrincipalUserDetails;
 import com.bug.board.domain.Board;
+import com.bug.board.domain.Reply;
 import com.bug.board.service.BoardService;
+import com.bug.board.service.ReplyService;
 import com.bug.board.validator.BoardValidator;
 
 import lombok.RequiredArgsConstructor;
@@ -32,6 +30,7 @@ public class BoardController {
 
 	private final BoardService boardService;
 	private final BoardValidator boardBalidator;
+	private final ReplyService replyService;
 
 	@Transactional(readOnly = true)
 	@GetMapping("/write")
@@ -47,8 +46,9 @@ public class BoardController {
 	public String boardDetail(@PathVariable Long id, Model model, @AuthenticationPrincipal PrincipalUserDetails principal) {
 
 		Board board = boardService.findById(id);
+		
 		model.addAttribute("principal", principal);
-		model.addAttribute("board", board);
+		model.addAttribute("board", board);		
 
 		return "board/detail";
 

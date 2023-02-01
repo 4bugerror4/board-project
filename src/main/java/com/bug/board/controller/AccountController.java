@@ -27,7 +27,6 @@ public class AccountController {
 	
 	private final UserService userService;
 	private final UserValidator userValidator;
-	private final BCryptPasswordEncoder encoder;
 	
 	@Transactional(readOnly = true)
 	@GetMapping("/auth/account/login")
@@ -50,33 +49,13 @@ public class AccountController {
 		
 		if (bindingResult.hasErrors()) {
 			return "account/register";
-		}
-		
-		String rawPWD = user.getPassword();
-		String encPWD = encoder.encode(rawPWD);
-		user.setPassword(encPWD);
-		user.setRoleType("ROLE_USER");
-		user.setCreateDate(Timestamp.valueOf(getDateTime()));
+		} 
 		
 		userService.save(user);
 		
 		return "redirect:/";
 	}
 	
-	private String getDateTime() {
-
-		LocalDate nowDate = LocalDate.now();
-		DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		String formatedNowDate = nowDate.format(formatterDate);
-
-		LocalTime nowTime = LocalTime.now();
-		DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm:ss");
-		String formatedNowTime = nowTime.format(formatterTime);
-
-		String dateTime = formatedNowDate + " " + formatedNowTime;
-
-		return dateTime;
-	}
-
+	
 
 }
